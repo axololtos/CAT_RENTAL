@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cat-black: #0d0d0d;
+  --color-cat-charcoal: #1c1c1c;
+  --color-cat-dark: #2b2b2b;
+  --color-cat-gray: #5c5c5c;
+  --color-cat-light: #f7f7f5;
+  --color-cat-muted: #e8e8e4;
+  --color-cat-yellow: #ffcd11;
+  --color-cat-yellow-dark: #e6b800;
+  --color-cat-white: #ffffff;
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--color-cat-light);
+    color: var(--color-cat-black);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-[1400px] space-y-8;
+  }
+
+  .page-title {
+    @apply text-[22px] font-semibold tracking-tight text-cat-black;
+  }
+
+  .page-sub {
+    @apply mt-1 text-sm text-cat-gray;
+  }
+
+  .section-label {
+    @apply mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-cat-gray;
+  }
+
+  .panel {
+    @apply bg-white;
+  }
+
+  .field {
+    @apply border-0 border-b border-cat-muted bg-transparent px-0 py-2 text-sm text-cat-black outline-none focus:border-cat-yellow;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-cat-black px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-cat-dark disabled:opacity-50;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center gap-2 bg-cat-yellow px-3.5 py-2 text-xs font-bold text-cat-black transition-colors hover:bg-cat-yellow-dark disabled:opacity-50;
+  }
+}

@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/.venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime / local
+backend/data/rentals.db
+backend/.env.local
+*.log
+.DS_Store
+
+# Build
+frontend/dist/
+.vite/
+
+# IDE
+.idea/
+.vscode/
