@@ -1,0 +1,52 @@
+{
+  "RecipeFormatVersion": "2020-01-25",
+  "ComponentName": "com.catrentals.EdgeTelemetryBuffer",
+  "ComponentVersion": "1.0.0",
+  "ComponentDescription": "Buffers CAT_RENTALS fleet telemetry locally in SQLite for store-and-forward during cellular outages, then relays queued readings to AWS IoT Core / Stream Manager once connectivity returns.",
+  "ComponentPublisher": "CAT_RENTALS",
+  "ComponentDependencies": {
+    "aws.greengrass.StreamManager": {
+      "VersionRequirement": ">=2.0.0 <3.0.0",
+      "DependencyType": "HARD"
+    }
+  },
+  "ComponentConfiguration": {
+    "DefaultConfiguration": {
+      "sqlitePath": "/greengrass/v2/work/com.catrentals.EdgeTelemetryBuffer/telemetry_buffer.db",
+      "mqttTopic": "fleet/telemetry/v1",
+      "streamManagerStreamName": "CatRentalsTelemetryStream",
+      "streamManagerMaxStreamSizeBytes": 268435456,
+      "flushIntervalSeconds": 15,
+      "flushBatchSize": 100,
+      "maxRetryBackoffSeconds": 300,
+      "accessControl": {
+        "aws.greengrass.ipc.mqttproxy": {
+          "com.catrentals.EdgeTelemetryBuffer:mqttproxy:1": {
+            "policyDescription": "Publish telemetry and receive local sensor readings.",
+            "operations": ["aws.greengrass#PublishToIoTCore", "aws.greengrass#SubscribeToIoTCore"],
+            "resources": ["fleet/telemetry/v1"]
+          }
+        }
+      }
+    }
+  },
+  "Manifests": [
+    {
+      "Platform": {
+        "os": "linux"
+      },
+      "Lifecycle": {
+        "Install": "pip3 install --user -r {artifacts:path}/requirements.txt",
+        "Run": "python3 {artifacts:path}/edge_buffer.py --sqlite-path {configuration:/sqlitePath} --topic {configuration:/mqttTopic} --stream-name {configuration:/streamManagerStreamName} --flush-interval {configuration:/flushIntervalSeconds} --flush-batch-size {configuration:/flushBatchSize} --max-retry-backoff {configuration:/maxRetryBackoffSeconds}"
+      },
+      "Artifacts": [
+        {
+          "URI": "s3://REPLACE_WITH_YOUR_COMPONENT_ARTIFACT_BUCKET/com.catrentals.EdgeTelemetryBuffer/1.0.0/edge_buffer.py"
+        },
+        {
+          "URI": "s3://REPLACE_WITH_YOUR_COMPONENT_ARTIFACT_BUCKET/com.catrentals.EdgeTelemetryBuffer/1.0.0/requirements.txt"
+        }
+      ]
+    }
+  ]
+}

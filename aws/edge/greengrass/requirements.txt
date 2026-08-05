@@ -1,0 +1,1 @@
+stream-manager-sdk>=1.1.0
