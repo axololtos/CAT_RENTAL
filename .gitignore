@@ -12,6 +12,14 @@ backend/.env.local
 *.log
 .DS_Store
 
+# AWS deployment secrets (keep aws/.env.example tracked, never the real file)
+aws/.env
+aws/cdk/cdk.out/
+aws/cdk/.venv/
+aws/ml/*.json
+aws/ml/*.csv
+!aws/ml/requirements.txt
+
 # Build
 frontend/dist/
 .vite/
