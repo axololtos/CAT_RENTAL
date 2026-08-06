@@ -210,6 +210,14 @@ Add screenshots of Dashboard, Assets, Anomalies, Forecast, and Check-In/Out here
 - Fuel usage is not in the CSV; runtime/idle hours are used as the usage signal.  
 - Transaction overrides (Check-In/Out) are stored in SQLite and layered over CSV data.
 
+## Cloud / AWS deployment
+
+An optional AWS-native telemetry & alerting layer (DynamoDB, IoT Core,
+Kinesis Firehose, Lambda, SNS, Greengrass edge buffering, XGBoost/Isolation
+Forest training scripts) lives in `aws/`. See `aws/README.md` for credential
+setup and deployment steps. It's additive — the local prototype above runs
+independently of it.
+
 ## Future improvements
 
 - Persistent equipment master DB + IoT telematics connectors  
