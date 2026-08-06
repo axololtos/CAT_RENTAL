@@ -16,6 +16,7 @@ backend/.env.local
 aws/.env
 aws/cdk/cdk.out/
 aws/cdk/.venv/
+aws/local/.venv/
 aws/ml/*.json
 aws/ml/*.csv
 !aws/ml/requirements.txt

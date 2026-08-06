@@ -122,8 +122,13 @@ Configured in `backend/.env`:
 | `LOCAL_CSV_PATH` | Path relative to backend/ | `data/equipment_rentals.csv` |
 | `REFRESH_INTERVAL_SECONDS` | Polling interval | `30` |
 | `SQLITE_PATH` | Transaction DB | `data/rentals.db` |
+| `USE_DYNAMODB` | Mirror Check-In/Check-Out into DynamoDB (real AWS or local) | `false` |
+| `DYNAMODB_ENDPOINT_URL` | Set to `http://localhost:4566` for the local demo; empty for real AWS | empty |
+| `DYNAMODB_CONTRACTS_TABLE` / `DYNAMODB_STATE_TABLE` | Table names | `RentalContracts` / `EquipmentLiveState` |
 
 Thresholds (utilization, idle anomaly, due-soon, forecast) are also adjustable via **Settings** in the UI.
+
+`USE_DYNAMODB` is off by default and everything above still works exactly as described with it off. See `aws/local/README.md` for a zero-cost, no-AWS-account walkthrough that wires this toggle up to LocalStack in Docker.
 
 ## Local CSV
 
