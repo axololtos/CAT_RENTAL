@@ -13,6 +13,7 @@ from fastapi import HTTPException
 
 from models.schemas import CheckInRequest, CheckOutRequest, EquipmentRecord, RentalTransaction
 from services import database as db
+from services import dynamo_repo
 from services.data_store import store
 from utils.status import is_active_rental
 
@@ -56,6 +57,7 @@ def perform_check_in(payload: CheckInRequest) -> RentalTransaction:
     updated.expected_return_date = payload.expected_return_date
     updated.rental_days = (payload.expected_return_date - payload.check_in_date).days
     store.upsert_override(updated)
+    dynamo_repo.mirror_check_in(updated)
 
     tx = RentalTransaction(
         id=db.new_id("cin"),
@@ -103,6 +105,7 @@ def perform_check_out(payload: CheckOutRequest) -> RentalTransaction:
     if updated.check_in_date:
         updated.rental_days = (payload.actual_return_date - updated.check_in_date).days
     store.upsert_override(updated)
+    dynamo_repo.mirror_check_out(payload.equipment_id, updated)
 
     tx = RentalTransaction(
         id=db.new_id("cout"),

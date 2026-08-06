@@ -4,8 +4,17 @@ This directory adds an optional AWS-native telemetry & alerting layer on top
 of the existing local prototype in `backend/` and `frontend/`. It is
 additive: nothing here changes how the FastAPI/React app runs locally.
 
+**Want to try this without an AWS account first?** See
+[`local/README.md`](local/README.md) — runs the DynamoDB half of this stack
+in Docker via LocalStack, wired to the existing dashboard's Check-In/
+Check-Out form, at zero cost and with no credentials.
+
 ```
 aws/
+├── local/                       # LocalStack demo — no AWS account needed
+│   ├── docker-compose.yml
+│   ├── bootstrap_localstack.py
+│   └── README.md
 ├── cdk/                        # AWS CDK (Python) — infrastructure as code
 │   ├── app.py
 │   ├── cat_rentals_stack.py

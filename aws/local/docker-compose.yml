@@ -1,0 +1,26 @@
+# Local, cost-free stand-in for AWS. Emulates the subset of services this
+# project actually needs for a full dashboard -> DynamoDB -> Lambda ->
+# SNS demo: S3, DynamoDB, SNS, Lambda, EventBridge.
+#
+# NOT emulated here (unsupported in LocalStack's free/Community edition):
+# IoT Core, Kinesis Data Firehose, Glue. That means the device-telemetry
+# ingestion path (edge gateway -> IoT Core -> Firehose -> S3 Parquet lake)
+# isn't testable locally — only the manual dashboard -> DynamoDB -> Lambda
+# alerting path is. See ../README.md for details.
+#
+# Usage: docker compose -f aws/local/docker-compose.yml up
+services:
+  localstack:
+    image: localstack/localstack:3
+    container_name: cat_rentals_localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,dynamodb,sns,lambda,events,logs,iam,sts,cloudwatch
+      - DEBUG=0
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack_data:/var/lib/localstack
+
+volumes:
+  localstack_data:
