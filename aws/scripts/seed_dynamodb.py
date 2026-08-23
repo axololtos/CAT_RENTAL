@@ -3,14 +3,19 @@ test after `cdk deploy`.
 
 Usage:
     AWS_REGION=us-east-1 python seed_dynamodb.py
+
+    # Or against a local LocalStack instance (see ../local/):
+    AWS_ENDPOINT_URL=http://localhost:4566 python seed_dynamodb.py
 """
 import os
 from datetime import date, timedelta
+from decimal import Decimal
 
 import boto3
 
 region = os.getenv("AWS_REGION", "us-east-1")
-dynamodb = boto3.resource("dynamodb", region_name=region)
+endpoint_url = os.getenv("AWS_ENDPOINT_URL")  # set for LocalStack, unset for real AWS
+dynamodb = boto3.resource("dynamodb", region_name=region, endpoint_url=endpoint_url)
 
 contracts_table = dynamodb.Table(os.getenv("DYNAMODB_CONTRACTS_TABLE", "RentalContracts"))
 state_table = dynamodb.Table(os.getenv("DYNAMODB_STATE_TABLE", "EquipmentLiveState"))
@@ -52,16 +57,16 @@ sample_state = [
         "equipment_id": "EQX1001",
         "site_id": "SITE-A",
         "last_seen": today.isoformat(),
-        "engine_hours_today": 6.5,
-        "idle_hours_today": 1.0,
+        "engine_hours_today": Decimal("6.5"),
+        "idle_hours_today": Decimal("1.0"),
         "operator_rfid": "RFID-204",
     },
     {
         "equipment_id": "EQX1002",
         "site_id": "SITE-B",
         "last_seen": today.isoformat(),
-        "engine_hours_today": 2.0,
-        "idle_hours_today": 5.0,
+        "engine_hours_today": Decimal("2.0"),
+        "idle_hours_today": Decimal("5.0"),
         "operator_rfid": "RFID-118",
     },
 ]

@@ -39,6 +39,15 @@ class Settings(BaseSettings):
     min_forecast_records: int = 20
     use_demo_forecast_data: bool = False
 
+    # Optional DynamoDB mirror (see aws/local/ for a LocalStack demo, or
+    # aws/cdk/ for the real-AWS stack). Off by default — the app runs fully
+    # standalone on local CSV/SQLite without this.
+    use_dynamodb: bool = False
+    aws_region: str = "us-east-1"
+    dynamodb_endpoint_url: str = ""  # e.g. http://localhost:4566 for LocalStack; empty = real AWS
+    dynamodb_contracts_table: str = "RentalContracts"
+    dynamodb_state_table: str = "EquipmentLiveState"
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -14,6 +14,7 @@ reflects the latest reading.
 import logging
 import os
 from datetime import datetime, timezone
+from decimal import Decimal
 
 import boto3
 
@@ -82,6 +83,11 @@ def _publish_alert(equipment_id: str, site_id: str, anomalies: list[str], readin
     )
 
 
+def _decimal_or_none(value) -> Decimal | None:
+    # DynamoDB's boto3 resource rejects native float; Decimal is required.
+    return None if value is None else Decimal(str(value))
+
+
 def handler(event, context):
     equipment_id = event.get("equipment_id")
     if not equipment_id:
@@ -99,12 +105,12 @@ def handler(event, context):
             "equipment_id": equipment_id,
             "site_id": site_id,
             "last_seen": now_iso,
-            "engine_hours_today": event.get("engine_hours_today", 0),
-            "idle_hours_today": event.get("idle_hours_today", 0),
-            "fuel_level_pct": event.get("fuel_level_pct"),
+            "engine_hours_today": _decimal_or_none(event.get("engine_hours_today", 0)),
+            "idle_hours_today": _decimal_or_none(event.get("idle_hours_today", 0)),
+            "fuel_level_pct": _decimal_or_none(event.get("fuel_level_pct")),
             "operator_rfid": event.get("operator_rfid"),
-            "lat": event.get("lat"),
-            "lon": event.get("lon"),
+            "lat": _decimal_or_none(event.get("lat")),
+            "lon": _decimal_or_none(event.get("lon")),
             "contract_id": contract["contract_id"] if contract else None,
             "anomalies": anomalies,
         }
